@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useWindowWidth from "../Hooks/useWindowWidth";
 
 const Nav = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -6,15 +7,23 @@ const Nav = () => {
     const toggleMenu = () => {
         setMenuOpen(prevMenuOpen => !prevMenuOpen);
     }
+    const windowWidth = useWindowWidth();
+    const deviceWidth = windowWidth < 876 ? "" : "visible";
 
-    return <nav class={`navMenu ${menuOpen ? "open" : ""}`}>
-        <a href="/">
+    useEffect(() => {
+        if(windowWidth > 876){
+            setMenuOpen(false);
+        }
+    }, [windowWidth])
+
+    return <nav class={`navMenu ${menuOpen ? "open" : ""} ${deviceWidth}`}>
+        <a href="/" style={{marginLeft: '15%'}}>
             <img src="/Images/Logo.svg" alt="Little Lemon logo"></img>
         </a>
 
         <img  class="hamMenu" src="/Images/hamMenu.svg" alt="Hamburger Menu Icon" onClick={toggleMenu}></img>
 
-        <ul class={`navLinks ${menuOpen ? "visible" : ""}`}>
+        <ul class={`navLinks ${menuOpen && (windowWidth < 876) ? "visible" : ""}`}>
             <li>
                 <a href="/">Home</a>
             </li>
